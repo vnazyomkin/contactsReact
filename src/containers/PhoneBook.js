@@ -19,10 +19,10 @@ export default function PhoneBook() {
         setContacts(contacts);
       }
       getContacts();
-    }, contacts);
+    }, [contacts]);
 
     const createId = () => {
-        return `f${(+new Date).toString(16)}`;
+        return `f${(+new Date()).toString(16)}`;
     };
 
     const turnOnAddition = () => {
@@ -63,10 +63,10 @@ export default function PhoneBook() {
 
     const sendContact = (contact, id) => {
         const data = JSON.stringify({id: createId(), ...contact});
-        const editContact = async function(data) {
-            const res = await fetch(process.env.API_URL + `contacts/${id}`, {
-                method: 'DELETE',
-            });
+        // const editContact = async function(data) {
+        //     const res = await fetch(process.env.API_URL + `contacts/${id}`, {
+        //         method: 'DELETE',
+        //     });
             // const res = await fetch(process.env.API_URL + `contacts/${id}`, {
             //   method: 'PUT',
             //   headers: {
@@ -74,9 +74,9 @@ export default function PhoneBook() {
             //   },
             //   body: data,
             // });
-        }
+        // }
 
-        editContact(data);
+        // editContact(data);
     }
 
     const sortFun = (a,b) => {
