@@ -4,6 +4,8 @@ import Contacts from '../components/Forms/Contacts';
 import Modal from '../components/Modal/Modal';
 import classes from './PhoneBook.module.css';
 
+import {getData, putData} from '../fetch';
+
 export default function PhoneBook() {
     const [contacts, setContacts] = useState(null);
     const [addition, setAddition] = useState(false);
@@ -13,13 +15,9 @@ export default function PhoneBook() {
     const url = 'http://localhost:4200/';
 
     useEffect(() => {
-      async function getContacts() {
-        const res = await fetch(url + 'contacts');
-        const contacts = await res.json();
-        setContacts(contacts);
-      }
-      getContacts();
-    }, [contacts]);
+        getData(url + 'contacts')
+          .then(contacts => setContacts(contacts));
+    }, []);
 
     const createId = () => {
         return `f${(+new Date()).toString(16)}`;
@@ -63,20 +61,10 @@ export default function PhoneBook() {
 
     const sendContact = (contact, id) => {
         const data = JSON.stringify({id: createId(), ...contact});
-        // const editContact = async function(data) {
-        //     const res = await fetch(process.env.API_URL + `contacts/${id}`, {
-        //         method: 'DELETE',
-        //     });
-            // const res = await fetch(process.env.API_URL + `contacts/${id}`, {
-            //   method: 'PUT',
-            //   headers: {
-            //     'Content-Type': 'application/json'
-            //   },
-            //   body: data,
-            // });
-        // }
+        putData(url + `contacts/${id}`, data)
+            .then(() => getData(url + 'contacts'))
+            .then(contacts => setContacts(contacts) );
 
-        // editContact(data);
     }
 
     const sortFun = (a,b) => {
