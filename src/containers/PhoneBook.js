@@ -1,11 +1,33 @@
 import React, {useEffect, useState} from 'react';
 
-import Contacts from './Forms/Contacts';
-import Modal from './Modal/Modal';
-import classes from './App.module.css'
+import Contacts from '../components/Forms/Contacts';
+import Modal from '../components/Modal/Modal';
+import classes from './PhoneBook.module.css';
 
-export default function App(props) {
-    const [contacts, setContacts] = useState(props.contacts);
+export default function PhoneBook() {
+    const intialContacts = [
+        {
+            "id": "1771959fa77",
+            "name": "Юрий Дудь7",
+            "phone": "+79156164848"
+        },
+        {
+            "id": "1771959fa78",
+            "name": "Юрий Дудь8",
+            "phone": "+79156164848"
+        },
+        {
+            "id": "1771959fa79",
+            "name": "Юрий Дудь9",
+            "phone": "+79156164848"
+        },
+        {
+            "id": "1771959fa70",
+            "name": "Юрий Дудь0",
+            "phone": "+79156164848"
+        }
+    ];
+    const [contacts, setContacts] = useState(intialContacts);
     const [addition, setAddition] = useState(false);
     const [editId, setEditId] = useState(null);
     const [modal, setModal] = useState(null);
