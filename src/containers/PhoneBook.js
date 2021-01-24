@@ -5,42 +5,21 @@ import Modal from '../components/Modal/Modal';
 import classes from './PhoneBook.module.css';
 
 export default function PhoneBook() {
-    const intialContacts = [
-        {
-            "id": "1771959fa77",
-            "name": "Юрий Дудь7",
-            "phone": "+79156164848"
-        },
-        {
-            "id": "1771959fa78",
-            "name": "Юрий Дудь8",
-            "phone": "+79156164848"
-        },
-        {
-            "id": "1771959fa79",
-            "name": "Юрий Дудь9",
-            "phone": "+79156164848"
-        },
-        {
-            "id": "1771959fa70",
-            "name": "Юрий Дудь0",
-            "phone": "+79156164848"
-        }
-    ];
-    const [contacts, setContacts] = useState(intialContacts);
+    const [contacts, setContacts] = useState(null);
     const [addition, setAddition] = useState(false);
     const [editId, setEditId] = useState(null);
     const [modal, setModal] = useState(null);
 
-    // useEffect(() => {
-    //   async function getContacts() {
-    //     const url = process.env.API_URL;
-    //     const res = await fetch(url + 'contacts');
-    //     const contacts = await res.json();
-    //     setContacts(contacts);
-    //   }
-    //   //getContacts();
-    // }, contacts);
+    const url = 'http://localhost:4200/';
+
+    useEffect(() => {
+      async function getContacts() {
+        const res = await fetch(url + 'contacts');
+        const contacts = await res.json();
+        setContacts(contacts);
+      }
+      getContacts();
+    }, contacts);
 
     const createId = () => {
         return `f${(+new Date).toString(16)}`;
@@ -107,21 +86,29 @@ export default function PhoneBook() {
         if (nameA > nameB) return 1;
         return 0;
     }
+    let contactList;
+    if (contacts) {
+        contactList = (
+            <Contacts
+                contacts={contacts.sort(sortFun)}
+                addition={addition}
+                editId={editId}
+                turnOnAddition={turnOnAddition}
+                turnOffAddition={turnOffAddition}
+                addContact={addContact}
+                startToEdit={startToEdit}
+                cancelToEdit={cancelToEdit}
+                showModal={showModal}
+                closeModal={closeModal}
+                sendContact={sendContact}/>
+        );
+    } else {
+        contactList = <p>Загрузка</p>
+    }
     return (
         <>
             <main className={classes.main}>
-                <Contacts
-                    contacts={contacts.sort(sortFun)}
-                    addition={addition}
-                    editId={editId}
-                    turnOnAddition={turnOnAddition}
-                    turnOffAddition={turnOffAddition}
-                    addContact={addContact}
-                    startToEdit={startToEdit}
-                    cancelToEdit={cancelToEdit}
-                    showModal={showModal}
-                    closeModal={closeModal}
-                    sendContact={sendContact}/>
+                {contactList}
             </main>
             {modal ? <Modal text={modal.text} resolve={modal.resolve} submit={deleteContact} closeModal={closeModal} id={modal.id}/> : null}
         </>
