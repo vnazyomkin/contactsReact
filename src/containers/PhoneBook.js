@@ -11,12 +11,14 @@ export default function PhoneBook() {
     const [addition, setAddition] = useState(false);
     const [editId, setEditId] = useState(null);
     const [modal, setModal] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const url = 'http://localhost:4200/';
 
     useEffect(() => {
         getData(url + 'contacts')
-          .then(contacts => setContacts(contacts));
+            .then(contacts => setContacts(contacts))
+            .then();
     }, []);
 
     const createId = () => {
@@ -48,10 +50,11 @@ export default function PhoneBook() {
 
     const cancelToEdit = (id) => {
         setEditId(null);
+        setModal(null);
     }
 
-    const showModal = (text, resolve, id) => {
-        setModal({text, resolve, id});
+    const showModal = (modal) => {
+        setModal(modal);
 
     }
 
@@ -63,7 +66,11 @@ export default function PhoneBook() {
         const data = JSON.stringify({id: createId(), ...contact});
         putData(url + `contacts/${id}`, data)
             .then(() => getData(url + 'contacts'))
-            .then(contacts => setContacts(contacts) );
+            .then(contacts => {
+                setContacts(contacts);
+                cancelToEdit();
+                alert(`Контакт ${contact.name} успешно изменен.`);
+            } );
 
     }
 
@@ -88,7 +95,8 @@ export default function PhoneBook() {
                 cancelToEdit={cancelToEdit}
                 showModal={showModal}
                 closeModal={closeModal}
-                sendContact={sendContact}/>
+                sendContact={sendContact}
+                loading={loading}/>
         );
     } else {
         contactList = <p>Загрузка</p>
@@ -98,7 +106,7 @@ export default function PhoneBook() {
             <main className={classes.main}>
                 {contactList}
             </main>
-            {modal ? <Modal text={modal.text} resolve={modal.resolve} submit={deleteContact} closeModal={closeModal} id={modal.id}/> : null}
+            {modal ? <Modal text={modal.text} resolve={modal.resolve} submit={modal.submit} closeModal={closeModal} id={modal.id}/> : null}
         </>
     );
 }

@@ -24,7 +24,7 @@ export default function EditContactForm(props) {
       initialValues={{name: props.name, phone: props.phone}}
       validationSchema={validationSchema}
       onSubmit={values => {
-        props.sendContact(values, props.id);
+        props.showModal({...props.modal, submit: () => props.submit(values, props.id)});
       }}
     >
       <Form>
