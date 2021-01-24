@@ -1,0 +1,19 @@
+.item {
+    display: inline-block;
+    width: 220px;
+
+    border: 1px solid black;
+}
+
+.line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    padding: 5px;
+
+}
+
+.button {
+    cursor: pointer;
+  }
